@@ -17,14 +17,17 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
-    }
-
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
