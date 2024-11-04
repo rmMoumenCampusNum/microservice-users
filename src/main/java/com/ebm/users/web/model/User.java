@@ -8,19 +8,20 @@ import jakarta.persistence.Id;
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String firstName;
     private String lastName;
-    private String birthDate;
-    private long driveLicenseNumber;
+    private long age;
+    private Long driveLicenseNumber;
 
 
-    public User(long id, String firstName, String lastName, String birthDate, long driveLicenseNumber) {
+    public User(long id, String firstName, String lastName, long age, Long driveLicenseNumber) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
+        this.age = age;
         this.driveLicenseNumber = driveLicenseNumber;
     }
 
@@ -52,15 +53,15 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public long getAge() {
+        return age;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setAge(long age) {
+        this.age = age;
     }
 
-    public long getDriveLicenseNumber() {
+    public Long getDriveLicenseNumber() {
         return driveLicenseNumber;
     }
 

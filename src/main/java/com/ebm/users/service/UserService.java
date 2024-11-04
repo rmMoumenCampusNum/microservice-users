@@ -14,6 +14,12 @@ public class UserService {
     private UserRepository userRepository;
 
     public User createUser(User user) {
+        if (user.getAge() < 18) {
+            throw new IllegalArgumentException("L'utilisateur doit avoir au moins 18 ans.");
+        } else if (user.getDriveLicenseNumber() == null) {
+            throw new IllegalArgumentException("L'utilisateur doit avoir un numéro de permis valide");
+        }
+
         return userRepository.save(user);
     }
 
