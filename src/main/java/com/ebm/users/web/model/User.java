@@ -4,9 +4,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
+
+@Setter
+@Getter
 @Entity
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -17,7 +27,7 @@ public class User {
     private String password;
     private long age;
     private Long driveLicenseNumber;
-    private String role;
+    private String role = "user";
 
 
     public User(long id, String firstName, String lastName, long age, Long driveLicenseNumber, String email, String password, String role) {
@@ -35,71 +45,38 @@ public class User {
 
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public long getAge() {
-        return age;
-    }
-
-    public void setAge(long age) {
-        this.age = age;
-    }
-
-    public Long getDriveLicenseNumber() {
-        return driveLicenseNumber;
-    }
-
     public void setDriveLicenseNumber(long driveLicenseNumber) {
         this.driveLicenseNumber = driveLicenseNumber;
     }
 
-    public String getEmail() {
-        return email;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.toUpperCase()));
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public String getUsername() {
+        return getEmail();
     }
 
-    public String getPassword() {
-        return password;
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
     }
 
-    public void setDriveLicenseNumber(Long driveLicenseNumber) {
-        this.driveLicenseNumber = driveLicenseNumber;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
     }
 
-    public String getRole() {
-        return role;
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
 }

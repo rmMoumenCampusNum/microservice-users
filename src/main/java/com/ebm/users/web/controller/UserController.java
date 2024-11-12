@@ -1,13 +1,17 @@
 package com.ebm.users.web.controller;
 
+import aj.org.objectweb.asm.TypeReference;
+import com.ebm.users.dto.Vehicle;
 import com.ebm.users.service.UserService;
 import com.ebm.users.web.model.User;
-import com.ebm.users.web.model.Vehicle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
