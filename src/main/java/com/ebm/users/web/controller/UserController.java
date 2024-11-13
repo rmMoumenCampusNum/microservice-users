@@ -1,21 +1,18 @@
 package com.ebm.users.web.controller;
 
-import aj.org.objectweb.asm.TypeReference;
-import com.ebm.users.dto.Vehicle;
+import com.ebm.users.dto.LoginRequest;
+import com.ebm.users.dto.LoginResponse;
 import com.ebm.users.service.UserService;
 import com.ebm.users.web.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class UserController {
 
@@ -50,6 +47,22 @@ public class UserController {
     public ResponseEntity<User> deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/users/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            // Authentifier l'utilisateur
+            User user = userService.authenticateUser(loginRequest.getEmail(), loginRequest.getPassword());
+
+            // Créer la réponse
+            LoginResponse response = new LoginResponse(user);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid credentials");
+        }
     }
 
 }

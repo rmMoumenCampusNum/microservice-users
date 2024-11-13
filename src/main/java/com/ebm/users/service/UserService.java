@@ -60,4 +60,15 @@ public class UserService implements UserDetailsService {
         return authorities;
     }
 
+    public User authenticateUser(String email, String password) {
+        User user = (User) userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return user;
+        } else {
+            throw new RuntimeException("Invalid password");
+        }
+    }
+
 }

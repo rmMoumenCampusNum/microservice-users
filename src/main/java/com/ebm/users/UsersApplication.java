@@ -20,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @SpringBootApplication
@@ -33,6 +35,7 @@ public class UsersApplication {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http
+				.cors(Customizer.withDefaults())
 				.csrf(AbstractHttpConfigurer::disable) // Désactive CSRF pour les appels d'API REST
 				.authorizeHttpRequests(auth -> {
 					// Accès à tous les utilisateurs connectés (USER ou ADMIN) pour ces routes
@@ -41,6 +44,8 @@ public class UsersApplication {
 
 					// Autoriser le POST sans authentification pour la création d'un utilisateur
 					auth.requestMatchers(HttpMethod.POST, "/users").permitAll();
+
+					auth.requestMatchers(HttpMethod.POST, "/users/login").permitAll();
 
 					// Toute autre requête nécessite une authentification
 					auth.anyRequest().authenticated();
@@ -65,4 +70,18 @@ public class UsersApplication {
 		return authenticationManagerBuilder.build();
 	}
 
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**")
+						.allowedOrigins("http://localhost:5173")
+						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // Ajout de OPTIONS
+						.allowedHeaders("*")
+						.allowCredentials(true)  // Important pour les requêtes authentifiées
+						.maxAge(3600);  // Cache des pre-flight requests
+			}
+		};
+	}
 }
