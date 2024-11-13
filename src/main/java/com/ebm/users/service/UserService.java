@@ -24,7 +24,7 @@ public class UserService {
             throw new IllegalArgumentException("L'utilisateur doit avoir un numéro de permis valide");
         }
 
-        return user;
+        return userRepository.save(user);
     }
 
     public List<User> getAllUsers() {
