@@ -39,7 +39,7 @@ public class UsersApplication {
 				.csrf(AbstractHttpConfigurer::disable) // Désactive CSRF pour les appels d'API REST
 				.authorizeHttpRequests(auth -> {
 					// Accès à tous les utilisateurs connectés (USER ou ADMIN) pour ces routes
-					auth.requestMatchers(HttpMethod.GET, "/users", "users/{id}").hasRole("ADMIN");
+					auth.requestMatchers(HttpMethod.GET, "/users", "users/{id}").hasAnyRole("USER","ADMIN");
 					auth.requestMatchers(HttpMethod.GET, "/users/{id}").hasRole("USER");
 
 					// Autoriser le POST sans authentification pour la création d'un utilisateur
